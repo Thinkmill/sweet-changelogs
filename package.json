@@ -1,0 +1,21 @@
+{
+  "name": "sweet-changelogs",
+  "version": "1.0.0",
+  "description": "A sweet little changelog generator that works off git tags",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "author": "Ben Conolly",
+  "bin": "./index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "dotenv": "^4.0.0",
+    "graphql": "^0.11.3",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "prettier": "^1.7.0"
+  }
+}
