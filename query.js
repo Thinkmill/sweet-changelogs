@@ -97,7 +97,7 @@ const antiAliasErrors = (data, mergeCommits) =>
 			)[0];
       console.log('ERROR', datum)
 			return {
-				fallback: `* fallback changelog; ${commit.message} - ${commit.hash}`,
+				fallback: config.fallback ?? config.fallback(commit) || `* fallback changelog; ${commit.message} - ${commit.hash}`,
 			};
 		})
 	);
