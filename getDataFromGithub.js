@@ -1,12 +1,6 @@
-#!/usr/bin/env node
-const { graphql, buildSchema } = require('graphql');
 const axios = require('axios');
-const getRelevantMergeCommits = require('./getRelevantMergeCommits');
-const config = require('./config.changelog');
 
-require('dotenv').load();
-
-const search = (safeHash, hash) => `
+const assembleSearch = (safeHash, hash) => `
 ${safeHash}: search(type: ISSUE, query: "sha=${hash}", last: 10) {
   issueCount
   nodes {
@@ -41,9 +35,9 @@ ${safeHash}: search(type: ISSUE, query: "sha=${hash}", last: 10) {
 }
 `;
 
-const makeQuery = array => `
+const assembleQuery = array => `
   {
-    ${array.map(({ safeHash, hash }) => search(safeHash, hash))}
+    ${array.map(({ safeHash, hash }) => assembleSearch(safeHash, hash))}
   }
 `;
 
@@ -58,7 +52,7 @@ const makeGHRequest = query =>
 			Promise.reject({ config: res.config, data: res.response.data })
 		);
 
-const transformData = data =>
+const transformData = (data, config) =>
 	Object.keys(data).map(key => {
 		const { issueCount, nodes } = data[key];
 		if (issueCount !== 1)
@@ -88,31 +82,23 @@ const transformData = data =>
 		};
 	});
 
-const antiAliasErrors = (data, mergeCommits) =>
-	mergeCommits.then(theMergeCommits =>
-		data.map(datum => {
-			if (!datum.errorMessage) return datum;
-			const commit = theMergeCommits.filter(
-				({ hash }) => hash === datum.hash
-			)[0];
-      console.log('ERROR', datum)
-			return {
-				fallback: config.fallback ?? config.fallback(commit) || `* fallback changelog; ${commit.message} - ${commit.hash}`,
-			};
-		})
-	);
+const antiAliasErrors = (data, mergeCommits, config) =>
+	data.map(datum => {
+		if (!datum.errorMessage) return datum;
+		const commit = mergeCommits.filter(({ hash }) => hash === datum.hash)[0];
+		console.log('ERROR', datum);
+		return {
+			fallback: config.fallback
+				? config.fallback(commit)
+				: `* fallback changelog; ${commit.message} - ${commit.hash}`,
+		};
+	});
 
-const getMessage = data =>
-	data.map(datum => datum.fallback || config.message(datum)).join('\n');
-
-const generateChangelogs = () => {
-	const mergeCommits = getRelevantMergeCommits();
-	return mergeCommits
-		.then(makeQuery)
-		.then(makeGHRequest)
-		.then(transformData)
-		.then(data => antiAliasErrors(data, mergeCommits))
-		.then(getMessage);
+const getDataFromGithub = (mergeCommits, config) => {
+	const query = assembleQuery(mergeCommits);
+	return makeGHRequest(query)
+		.then(data => transformData(data, config))
+		.then(data => antiAliasErrors(data, mergeCommits));
 };
 
-module.exports = generateChangelogs;
+module.exports = getDataFromGithub;
