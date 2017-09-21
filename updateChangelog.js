@@ -1,8 +1,11 @@
 const fs = require('fs');
 
+// TODO: don't add an `## Unreleased` header if there already is one
+
 const getNewChangelogSection = (newEntries, unreleased) => `
 
 ${unreleased || `## Unreleased`}
+
 ${newEntries}
 `;
 
