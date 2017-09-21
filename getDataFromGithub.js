@@ -22,9 +22,9 @@ ${safeHash}: search(type: ISSUE, query: "sha=${hash}", last: 10) {
         edges {
           node {
             commit {
-              author {
-                name
-              }
+				author {
+					name
+				}
               oid
             }
           }

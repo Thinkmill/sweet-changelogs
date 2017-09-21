@@ -26,6 +26,7 @@ const getRelevantCommits = lastTag => {
 	// git log `git describe --tags --abbrev=0 HEAD^`..HEAD --pretty=tformat:"%H : %s" --grep="Merge"
 	// git log v1.0.0-rc.6..HEAD --pretty=tformat:"%H : %s" --grep="Merge"
 	return new Promise((resolve, reject) => {
+		let allCommits = [];
 		const range = `${lastTag.split('\n')[0]}..HEAD`;
 		const subProcess = spawn('git', [
 			'log',
@@ -35,9 +36,16 @@ const getRelevantCommits = lastTag => {
 		]);
 		subProcess.stderr.on('data', data => reject(data.toString()));
 		subProcess.stdout.on('data', data => {
-			const relevantCommits = data
-				.toString()
-				.split('\n')
+			allCommits = [
+				...allCommits,
+				...data
+					.toString()
+					.split('\n')
+					.filter(n => n),
+			];
+		});
+		subProcess.on('close', data => {
+			const relevantCommits = allCommits
 				.map(commit => {
 					const commitParts = commit.split(' : ');
 					const hash = commitParts[0].replace('"', '');
@@ -51,9 +59,6 @@ const getRelevantCommits = lastTag => {
 				})
 				.filter(c => c.message && c.message.match(/^Merge/));
 			resolve(relevantCommits);
-		});
-		subProcess.on('close', data => {
-			reject('finished with no data');
 		});
 	});
 };

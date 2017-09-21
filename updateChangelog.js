@@ -27,7 +27,6 @@ const updateChangelog = (
 	newChangelogs,
 	{ changelogPath, unreleased, message }
 ) => {
-	console.log(newChangelogs);
 	// TODO: Move this validation to the config step
 	const hasChangelog = fs.existsSync(changelogPath);
 	if (!hasChangelog)
@@ -36,7 +35,6 @@ const updateChangelog = (
 		);
 
 	const newChangelogStrings = getMessage(newChangelogs, message);
-	console.log(newChangelogStrings);
 	const newChangelogSection = getNewChangelogSection(
 		newChangelogStrings,
 		unreleased
