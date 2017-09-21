@@ -6,14 +6,11 @@
   "scripts": {
     "lint": "eslint .",
     "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --trailing-comma es5 --use-tabs --write"
+    "prettier":
+      "prettier --single-quote --trailing-comma es5 --use-tabs --write"
   },
   "lint-staged": {
-    "*.js": [
-      "yarn prettier",
-      "yarn lint",
-      "git add"
-    ]
+    "*.js": ["yarn prettier", "yarn lint", "git add"]
   },
   "author": "Ben Conolly",
   "bin": "./index.js",

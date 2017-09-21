@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+require('dotenv').load();
 const config = require('./assembleConfigInformation');
 const getRelevantMergeCommits = require('./getRelevantMergeCommits');
 const getDataFromGithub = require('./getDataFromGithub');

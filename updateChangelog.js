@@ -25,6 +25,7 @@ const updateChangelog = (
 	{ changelogPath, unreleased, message }
 ) => {
 	console.log(newChangelogs);
+	// TODO: Move this validation to the config step
 	const hasChangelog = fs.existsSync(changelogPath);
 	if (!hasChangelog)
 		return Promise.reject(

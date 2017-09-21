@@ -44,7 +44,7 @@ const assembleQuery = array => `
 const makeGHRequest = query =>
 	axios
 		.post(
-			`https://api.github.com/graphql?access_token=${process.env.OAUTH_TOKEN}`,
+			`https://api.github.com/graphql?access_token=${process.env.GITHUB_TOKEN}`,
 			{ query }
 		)
 		.then(res => res.data.data)
