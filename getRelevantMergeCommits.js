@@ -32,6 +32,7 @@ const getRelevantCommits = lastTag => {
 			'log',
 			range,
 			'--tags',
+			'--merges',
 			'--pretty=tformat:"%H : %s"',
 		]);
 		subProcess.stderr.on('data', data => reject(data.toString()));
@@ -45,19 +46,17 @@ const getRelevantCommits = lastTag => {
 			];
 		});
 		subProcess.on('close', data => {
-			const relevantCommits = allCommits
-				.map(commit => {
-					const commitParts = commit.split(' : ');
-					const hash = commitParts[0].replace('"', '');
-					return {
-						hash,
-						// graphql does not allow numbers at the start of variable names, so
-						// we add two 'a's to our keys to make sure they are safe.
-						safeHash: `aa${hash}`,
-						message: commitParts[1],
-					};
-				})
-				.filter(c => c.message && c.message.match(/^Merge/));
+			const relevantCommits = allCommits.map(commit => {
+				const commitParts = commit.split(' : ');
+				const hash = commitParts[0].replace('"', '');
+				return {
+					hash,
+					// graphql does not allow numbers at the start of variable names, so
+					// we add two 'a's to our keys to make sure they are safe.
+					safeHash: `aa${hash}`,
+					message: commitParts[1],
+				};
+			});
 			resolve(relevantCommits);
 		});
 	});
