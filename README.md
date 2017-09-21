@@ -1,6 +1,6 @@
 You will need a .env file, which should be git ignored in the project using sweet-changelogs. It will need a github oauth key provided to it (see here)[https://github.com/settings/tokens] which will need read access to access to github.
 
-You will also need a config.changelog.js file. Note that all of this can be inferred, assuming your project has a git field with a link to the project's github page.
+You will also need a `.sweet-changelogs.js` file. Note that all of this can be inferred, assuming your project has a git field with a link to the project's github page.
 
 ```js
 module.exports = {

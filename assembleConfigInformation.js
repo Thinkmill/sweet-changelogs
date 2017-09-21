@@ -2,7 +2,7 @@ const projectDir = process.env.PWD;
 const path = require('path');
 require('dotenv').load();
 
-const configPath = path.join(projectDir, 'config.changelog');
+const configPath = path.join(projectDir, '.sweet-changelogs');
 const config = require(configPath);
 const pkgJSONPath = path.join(projectDir, 'package.json');
 const changelogPath = path.join(projectDir, config.filename || 'CHANGELOG.md');
