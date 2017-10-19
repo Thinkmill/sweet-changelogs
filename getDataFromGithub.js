@@ -2,7 +2,6 @@ const axios = require('axios');
 
 const assembleSearch = (safeHash, hash) => `
 ${safeHash}: search(type: ISSUE, query: "sha=${hash}", last: 10) {
-  issueCount
   nodes {
     ... on PullRequest {
       repository {
@@ -54,15 +53,18 @@ const makeGHRequest = query =>
 
 const transformData = (data, config) =>
 	Object.keys(data).map(key => {
-		const { issueCount, nodes } = data[key];
-		if (issueCount !== 1)
+		const { nodes } = data[key];
+		const relevantNodes = nodes.filter(({ url }) =>
+			url.includes(`${config.owner}/${config.name}`)
+		);
+		if (relevantNodes.length !== 1)
 			return {
 				errorMessage: 'incorrect issue count',
-				issueCount,
+				issueCount: relevantNodes.length,
 				errorNodes: nodes,
 				hash: key.replace('aa', ''),
 			};
-		const node = nodes[0];
+		const node = relevantNodes[0];
 		if (node.repository.nameWithOwner !== `${config.owner}/${config.name}`)
 			return {
 				errorMessage: `wrong repository name/owner, expect to be at ${config.owner}/${config.name} but were were in ${node
