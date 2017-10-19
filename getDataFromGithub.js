@@ -98,7 +98,7 @@ const getDataFromGithub = (mergeCommits, config) => {
 	const query = assembleQuery(mergeCommits);
 	return makeGHRequest(query)
 		.then(data => transformData(data, config))
-		.then(data => antiAliasErrors(data, mergeCommits));
+		.then(data => antiAliasErrors(data, mergeCommits, config));
 };
 
 module.exports = getDataFromGithub;
