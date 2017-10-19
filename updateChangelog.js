@@ -35,6 +35,7 @@ const updateChangelog = (
 		);
 
 	const newChangelogStrings = getMessage(newChangelogs, message);
+	console.log(`Added changelog entries:\n${newChangelogStrings}\n`);
 	const newChangelogSection = getNewChangelogSection(
 		newChangelogStrings,
 		unreleased
