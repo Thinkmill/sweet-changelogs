@@ -1,6 +1,6 @@
 {
   "name": "sweet-changelogs",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A sweet little changelog generator that works off git tags",
   "main": "index.js",
   "scripts": {
