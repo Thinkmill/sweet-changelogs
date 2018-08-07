@@ -6,12 +6,27 @@
   "scripts": {
     "lint": "eslint .",
     "precommit": "lint-staged",
-    "prettier":
-      "prettier --single-quote --trailing-comma es5 --use-tabs --write"
+    "prettier": "prettier --single-quote --trailing-comma es5 --use-tabs --write"
   },
   "lint-staged": {
     "*.js": ["yarn prettier", "yarn lint", "git add"]
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Thinkmill/sweet-changelogs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Thinkmill/sweet-changelogs/issues"
+  },
+  "keywords": [
+    "changelogs",
+    "change",
+    "log",
+    "markdown",
+    "automation",
+    "CLI",
+    "sweet"
+  ],
   "author": "Ben Conolly",
   "bin": "./index.js",
   "license": "MIT",
